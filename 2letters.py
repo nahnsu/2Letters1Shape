@@ -76,7 +76,7 @@ class TwoLetter3D:
         if face == "x":
             return rotate(a=90, v=[0,1,0])(shape)
         if face == "y":
-            return rotate(a=-90, v=[1,0,0])(shape)
+            return rotate(a=-90, v=[0,0,1])(shape)
         else:
             raise ValueError("Face must be one of 'x', 'y', or 'z'.")
 
@@ -154,6 +154,16 @@ def letter_F(h):
 
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
+    
+    letters = [chr(x) for x in range(ord('A'), ord('F') + 1)]
 
-    shape = TwoLetter3D(10, "C", "z")
-    shape.render()
+    # Generate all combos
+    # for letter in letters:
+    #     for other_letter in letters:
+    #         shape = TwoLetter3D(10, letter, "z", other_letter, "y")
+    #         shape.render()
+
+    # Generate all letters
+    for letter in letters:
+        shape = TwoLetter3D(10, letter, "z")
+        shape.render()
