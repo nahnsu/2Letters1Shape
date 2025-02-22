@@ -47,7 +47,7 @@ class Letter2D:
             points = top_arc_points + bottom_arc_points + other_points
         if self.letter == "C":
             outer_arc_points = arc_points(1/2, 30, 330, center=[1/2,1/2])
-            inner_arc_points = arc_points(1/4, 30, 330, center=[1/2,1/2])[::-1]
+            inner_arc_points = arc_points(1/3, 30, 330, center=[1/2,1/2])[::-1]
             points = outer_arc_points + inner_arc_points
         if self.letter == "D":
             outer_arc_points = arc_points(1/2, 90, -90, center= [1/2, 1/2])
@@ -56,18 +56,15 @@ class Letter2D:
             points = [(0,0), (1,0), (1,1/5), (1/5,1/5), (1/5,2/5), (3/4,2/5), (3/4,3/5), (1/5,3/5), (1/5,4/5), (1,4/5), (1,1), (0,1)]
         if self.letter == "F":
             points = [(0,0), (1/5,0), (1/5,2/5), (3/4,2/5), (3/4,3/5), (1/5,3/5), (1/5,4/5), (1,4/5), (1,1), (0,1)]
-        if self.letter == "G":
-            outer_arc_points = arc_points(1/2, 30, 360, center=[1/2,1/2])
-            other_points = [(1/2,1/2), (1/2, 1/3)]
-            x = sqrt((1/3)**2 - (1/6)**2)
-            theta = math.degrees(math.atan((1/6)/x))
-            inner_arc_points = arc_points(1/3, 360 - theta, 30, center=[1/2,1/2])
-            points = outer_arc_points + other_points + inner_arc_points
-        # TODO: change so these have line width 1/6 more in line with other styles
         if self.letter == "H":
-            points = [(0,0), (1/3,0), (1/3,1/3), (2/3,1/3), (2/3,0), (1,0), (1,1), (2/3,1), (2/3,2/3), (1/3,2/3), (1/3,1), (0,1)]
+            points = [(0, 0), (0, 1), (1/6, 1), (1/6, 7/12), (5/6, 7/12), (5/6, 1), (1, 1), (1, 0), (5/6, 0), (5/6, 5/12), (1/6, 5/12), (1/6, 0)]
         if self.letter == "I":
-            points = [(0,0), (1,0), (1,1/3), (2/3,1/3), (2/3,2/3), (1,2/3), (1,1), (0,1), (0,2/3), (1/3,2/3), (1/3,1/3), (0,1/3)]
+            points = [(0,0), (1,0), (1,1/6), (7/12,1/6), (7/12,5/6), (1,5/6), (1,1), (0,1), (0,5/6), (5/12,5/6), (5/12,1/6), (0,1/6)]
+        if self.letter == "J":
+            inner_arc = arc_points(1/3, 360, 180, [1/2,1/2])
+            outer_arc = arc_points(1/2, 180, 360, [1/2,1/2])
+            other_points = [(1,1), (0,1), (0,5/6), (5/6,5/6)]
+            points = inner_arc + outer_arc + other_points
 
         scaled_points = [(p[0] * self.scale, p[1] * self.scale) for p in points]
         return scaled_points
@@ -98,6 +95,7 @@ class Letter2D:
                 shape = difference()(shape, positioned_hole)
         return shape
     
+
     def render(self):
         scad_render_to_file(self.shape, f"output/{self.name}.scad", file_header='$fn=50;')
         subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{self.name}.stl", f"output\\{self.name}.scad"])
@@ -141,20 +139,19 @@ class TwoLetter3D:
 
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
+
+        # # Generate a letter
+    shape = TwoLetter3D(10, "J", "C")
+    shape.render()
     
     letters = [chr(x) for x in range(ord('A'), ord('H') + 1)]
 
-    # Generate all combos
+    # # Generate all combos
     # for letter in letters:
     #     for other_letter in letters:
     #         shape = TwoLetter3D(10, letter, other_letter)
     #         shape.render()
 
-    # Generate all letters
+    # # Generate all letters
     # for letter in letters:
     #     shape = TwoLetter3D(10, letter, "z")
-    #     shape.render()
-
-    #Generate a letter
-    shape = TwoLetter3D(10, "G")
-    shape.render()
