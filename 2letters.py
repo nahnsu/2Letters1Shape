@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import subprocess
 import os
 import pdb
+import grok_letters as grok
+import letters as let
+import o1_letters as o1
 
 def arc_points(radius, start_angle, end_angle, center=[0,0], num_points=50):
     angles = [start_angle + i * (end_angle - start_angle) / (num_points - 1)
@@ -34,41 +37,11 @@ class Letter2D:
         self.letter = letter
         self.scale = scale
         self.shape = self.generate()
-
-
-    def get_letter_points(self):
-        points = []
-        if self.letter == "A":
-            points = [(0,0), (1/2, 1), (1, 0), (5/6, 0), (2/3, 1/3), (1/3, 1/3), (1/6, 0)]
-        if self.letter == "B":
-            top_arc_points = arc_points(1/4, 90, -90, center=[3/4, 3/4])
-            bottom_arc_points = arc_points(1/4, 90, -90, center=[3/4, 1/4])
-            other_points = [(0,0),(0,1)]
-            points = top_arc_points + bottom_arc_points + other_points
-        if self.letter == "C":
-            outer_arc_points = arc_points(1/2, 30, 330, center=[1/2,1/2])
-            inner_arc_points = arc_points(1/3, 30, 330, center=[1/2,1/2])[::-1]
-            points = outer_arc_points + inner_arc_points
-        if self.letter == "D":
-            outer_arc_points = arc_points(1/2, 90, -90, center= [1/2, 1/2])
-            points = outer_arc_points + [(0,0), (0, 1)]
-        if self.letter == "E":
-            points = [(0,0), (1,0), (1,1/5), (1/5,1/5), (1/5,2/5), (3/4,2/5), (3/4,3/5), (1/5,3/5), (1/5,4/5), (1,4/5), (1,1), (0,1)]
-        if self.letter == "F":
-            points = [(0,0), (1/5,0), (1/5,2/5), (3/4,2/5), (3/4,3/5), (1/5,3/5), (1/5,4/5), (1,4/5), (1,1), (0,1)]
-        if self.letter == "H":
-            points = [(0, 0), (0, 1), (1/6, 1), (1/6, 7/12), (5/6, 7/12), (5/6, 1), (1, 1), (1, 0), (5/6, 0), (5/6, 5/12), (1/6, 5/12), (1/6, 0)]
-        if self.letter == "I":
-            points = [(0,0), (1,0), (1,1/6), (7/12,1/6), (7/12,5/6), (1,5/6), (1,1), (0,1), (0,5/6), (5/12,5/6), (5/12,1/6), (0,1/6)]
-        if self.letter == "J":
-            inner_arc = arc_points(1/3, 360, 180, [1/2,1/2])
-            outer_arc = arc_points(1/2, 180, 360, [1/2,1/2])
-            other_points = [(1,1), (0,1), (0,5/6), (5/6,5/6)]
-            points = inner_arc + outer_arc + other_points
-
-        scaled_points = [(p[0] * self.scale, p[1] * self.scale) for p in points]
-        return scaled_points
     
+    def get_letter_points(self):
+        points = getattr(o1, self.letter)
+        scaled_points = [(point[0] * self.scale, point[1] * self.scale) for point in points]
+        return scaled_points
 
     def get_letter_holes(self):
         holes = []
@@ -77,15 +50,14 @@ class Letter2D:
         if self.letter == "B":
             holes = [Hole(1/6, 1/2, 3/4), Hole(1/6, 1/2, 1/4)]
         if self.letter == "D":
-            holes = [Hole(1/2, 1/2, 1/6)]
+            holes = [Hole(1/3, 1/2, 1/2)]
 
         scaled_holes = [Hole(hole.radius*self.scale, hole.x*self.scale, hole.y*self.scale) for hole in holes]
         return scaled_holes
 
     
     def generate(self):
-        outer_shape_points = self.get_letter_points()
-        shape = polygon(points=outer_shape_points)
+        shape = polygon(points=self.get_letter_points())
         holes = self.get_letter_holes()
 
         if holes:
@@ -133,6 +105,8 @@ class TwoLetter3D:
             file_name = self.letterA
             scad_render_to_file(letterA3D, f"output/{file_name}.scad", file_header='$fn=50;')
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
+            subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--autocenter"])
+            os.remove(f"output/{file_name}.scad")
             return
                 
 
@@ -140,11 +114,12 @@ class TwoLetter3D:
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
 
-        # # Generate a letter
-    shape = TwoLetter3D(10, "J", "C")
-    shape.render()
+    # # Generate a letter
+    # letter = input()
+    # shape = TwoLetter3D(10, letter)
+    # shape.render()
     
-    letters = [chr(x) for x in range(ord('A'), ord('H') + 1)]
+    letters = [chr(x) for x in range(ord('A'), ord('Z') + 1)]
 
     # # Generate all combos
     # for letter in letters:
@@ -152,6 +127,7 @@ if __name__ == "__main__":
     #         shape = TwoLetter3D(10, letter, other_letter)
     #         shape.render()
 
-    # # Generate all letters
-    # for letter in letters:
-    #     shape = TwoLetter3D(10, letter, "z")
+    # Generate all letters
+    for letter in letters:
+        shape = TwoLetter3D(10, letter)
+        shape.render()
