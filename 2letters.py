@@ -7,6 +7,7 @@ import subprocess
 import os
 import pdb
 import grok_letters as grok
+import grok_think as grok_think
 import letters as let
 import o1_letters as o1
 
@@ -39,7 +40,7 @@ class Letter2D:
         self.shape = self.generate()
     
     def get_letter_points(self):
-        points = getattr(o1, self.letter)
+        points = getattr(grok_think, self.letter)
         scaled_points = [(point[0] * self.scale, point[1] * self.scale) for point in points]
         return scaled_points
 
@@ -102,7 +103,8 @@ class TwoLetter3D:
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
             return
         else:
-            file_name = self.letterA
+            # file_name = "o1_" + self.letterA
+            file_name = "grok_think_" + self.letterA
             scad_render_to_file(letterA3D, f"output/{file_name}.scad", file_header='$fn=50;')
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
             subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--autocenter"])
