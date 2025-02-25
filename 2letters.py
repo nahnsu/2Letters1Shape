@@ -5,11 +5,11 @@ import math
 import matplotlib.pyplot as plt
 import subprocess
 import os
-import pdb
 import grok_letters as grok
 import grok_think as grok_think
 import letters as let
 import o1_letters as o1
+import letter_holes as letter_holes
 
 def arc_points(radius, start_angle, end_angle, center=[0,0], num_points=50):
     angles = [start_angle + i * (end_angle - start_angle) / (num_points - 1)
@@ -21,18 +21,6 @@ def arc_points(radius, start_angle, end_angle, center=[0,0], num_points=50):
     ]
     return points
 
-class Hole:
-    def __init__(self, radius, x, y):
-        """
-        Hole defined by:
-        :param x: x dimension for center point of the circle as a ratio of letter height
-        :param y: y dimension for center point of the circle as a ratio of letter height
-        :param radius: radius of circle as a ratio of letter height
-        """
-        self.x = x
-        self.y = y
-        self.radius = radius
-
 class Letter2D:
     def __init__(self, letter, scale):
         self.letter = letter
@@ -40,20 +28,19 @@ class Letter2D:
         self.shape = self.generate()
     
     def get_letter_points(self):
-        points = getattr(grok_think, self.letter)
+        points = getattr(let, self.letter)
+        # points = getattr(o1, self.letter)
+        # points = getattr(grok, self.letter)
         scaled_points = [(point[0] * self.scale, point[1] * self.scale) for point in points]
         return scaled_points
 
     def get_letter_holes(self):
-        holes = []
-        if self.letter == "A": 
-            holes = [Hole(1/6, 1/2, 7/12)]
-        if self.letter == "B":
-            holes = [Hole(1/6, 1/2, 3/4), Hole(1/6, 1/2, 1/4)]
-        if self.letter == "D":
-            holes = [Hole(1/3, 1/2, 1/2)]
+        try:
+            holes = getattr(letter_holes, self.letter)
+        except:
+            holes = []
 
-        scaled_holes = [Hole(hole.radius*self.scale, hole.x*self.scale, hole.y*self.scale) for hole in holes]
+        scaled_holes = [letter_holes.Hole(hole.radius*self.scale, hole.x*self.scale, hole.y*self.scale) for hole in holes]
         return scaled_holes
 
     
@@ -104,10 +91,13 @@ class TwoLetter3D:
             return
         else:
             # file_name = "o1_" + self.letterA
-            file_name = "grok_think_" + self.letterA
+            # file_name = "grok_think_" + self.letterA
+            file_name = self.letterA
+            # file_name = "grok_" + self.letterA
             scad_render_to_file(letterA3D, f"output/{file_name}.scad", file_header='$fn=50;')
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
-            subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--autocenter"])
+            # subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--autocenter"])
+            subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--camera=0,0,30,0,0,0", "--viewall", "--autocenter", "--projection=o"])
             os.remove(f"output/{file_name}.scad")
             return
                 
@@ -116,12 +106,12 @@ class TwoLetter3D:
 if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
 
-    # # Generate a letter
-    # letter = input()
-    # shape = TwoLetter3D(10, letter)
-    # shape.render()
+    # Generate a letter
+    letter = input()
+    shape = TwoLetter3D(10, letter)
+    shape.render()
     
-    letters = [chr(x) for x in range(ord('A'), ord('Z') + 1)]
+    letters = [chr(x) for x in range(ord('A'), ord('J') + 1)]
 
     # # Generate all combos
     # for letter in letters:
@@ -129,7 +119,7 @@ if __name__ == "__main__":
     #         shape = TwoLetter3D(10, letter, other_letter)
     #         shape.render()
 
-    # Generate all letters
-    for letter in letters:
-        shape = TwoLetter3D(10, letter)
-        shape.render()
+    # # Generate all letters
+    # for letter in letters:
+    #     shape = TwoLetter3D(10, letter)
+    #     shape.render()

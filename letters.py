@@ -54,3 +54,22 @@ inner_arc_J = arc_points(1/3, 360, 180, [1/2,1/2])
 outer_arc_J = arc_points(1/2, 180, 360, [1/2,1/2])
 other_points_J = [(1,1), (0,1), (0,5/6), (5/6,5/6)]
 J = inner_arc_J + outer_arc_J + other_points_J
+
+K = [(0,0), (1/6,0), (1/6, math.sqrt(2)/6), (1/2-math.sqrt(2)/12,1/2-math.sqrt(2)/12), (1-math.sqrt(2)/6,0), (1,0), (1/2,1/2), (1,1), (1-math.sqrt(2)/6,1), (1/6,math.sqrt(2)/3), (1/6,1), (0,1)]
+
+# GROK
+L = [(0,0), (0,1), (1/6,1), (1/6,1/6), (1,1/6), (1,0)]
+
+M = [(1/6,0), (0,0), (0,1), (1/6,1), (1/2,1/6), (5/6,1), (1,1), (1,0), (5/6,0), (5/6,1-math.sqrt(2)/3), (1/2+math.sqrt(2)/12, 0), (1/2,0), (1/2-math.sqrt(2)/12, 0), (1/6,1-math.sqrt(2)/3)
+     ]
+
+N = [(0,0), (0,1), (1/6,1), (5/6,math.sqrt(2)/6), (5/6,1), (1,1), (1,0), (5/6,0), (1/6,1-math.sqrt(2)/6), (1/6,0)]
+
+outer_arc_points_O = arc_points(1/2, 0, 360, [1/2,1/2])
+inner_arc_points_O = arc_points(1/3, 360, 0, [1/2,1/2])
+O = outer_arc_points_O + inner_arc_points_O
+
+# P
+p_arc = arc_points(1/4, 90, -90, center=[3/4, 3/4])
+other_points = [(1/6,1/2), (1/6,0), (0,0), (0,1)]
+P = p_arc + other_points
