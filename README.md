@@ -1,6 +1,9 @@
 # 2Letters1Shape
 Python script for creating a 3D shape of two orthogonal letters
 
+# How to run locally
+To generate an object, 
+
 # Logs
 
 ## 16/02/25
