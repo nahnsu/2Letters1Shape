@@ -1,4 +1,3 @@
-# points.py
 import math
 
 def arc_points(radius, start_angle, end_angle, center=[0,0], num_points=50):
@@ -73,3 +72,41 @@ O = outer_arc_points_O + inner_arc_points_O
 p_arc = arc_points(1/4, 90, -90, center=[3/4, 3/4])
 other_points = [(1/6,1/2), (1/6,0), (0,0), (0,1)]
 P = p_arc + other_points
+
+theta = math.degrees(math.atan(math.sqrt(5)/2))
+q_arc = arc_points(1/2, -theta, 270, center=[1/2,1/2])
+other_points = [(1,0), (1,1/6)]
+Q = q_arc + other_points
+
+r_arc = arc_points(1/4, 90, -90, center=[3/4, 3/4])
+other_points = [(1/2, 1/2), (1,0), (1-math.sqrt(2)/6,0), (1/2-math.sqrt(2)/6,1/2), (1/6,1/2), (1/6,0), (0,0), (0,1)]
+R = r_arc + other_points
+
+arc_1 = arc_points(7/24, 0, 90, center=[17/24,17/24])
+arc_2 = arc_points(7/24, 90, 270, center=[7/24,17/24])
+arc_3 = arc_points(1/8, 90, -90, center=[17/24,7/24])
+arc_4 = arc_points(1/8, 270, 180, center=[7/24,7/24])
+arc_5 = arc_points(7/24, 180, 270, center=[7/24,7/24])
+arc_6 = arc_points(7/24, -90, 90, center=[17/24,7/24])
+arc_7 = arc_points(1/8, 270, 90, center=[7/24,17/24])
+arc_8 = arc_points(1/8, 90, 0, center=[17/24,17/24])
+S = arc_1 + arc_2 + arc_3 + arc_4 + arc_5 + arc_6 + arc_7 + arc_8
+
+T = [(0,1), (1,1), (1,5/6), (7/12,5/6), (7/12,0), (5/12,0), (5/12,5/6), (0,5/6)]
+
+# U
+outer_arc_U = arc_points(1/2, 180, 360, center=[1/2, 1/2])
+other_points_U = [(1,1), (5/6,1), (5/6,1/2)]
+inner_arc_U = arc_points(1/3, 360, 180, center=[1/2, 1/2])
+other_other_points = [(1/6,1), (0,1)]
+U = outer_arc_U + other_points_U + inner_arc_U + other_other_points
+
+V = [(0,1), (1/6,1), (1/2,1/6), (5/6,1), (1,1), (3/5,0), (2/5,0)]
+
+W = [(0,1), (1/6,1), (1/3,1/6), (2/5,1/2), (3/5,1/2), (2/3,1/6), (5/6,1), (1,1), (4/5,0), (17/30,0), (1/2,1/3), (13/30,0), (1/5,0)]
+
+X = [(0,0), (math.sqrt(2)/6,0), (1/2,(6-math.sqrt(2))/12), (1-math.sqrt(2)/6,0), (1,0), ((6+math.sqrt(2))/12,1/2), (1,1), (1-math.sqrt(2)/6,1), (1/2,(6+math.sqrt(2))/12), (math.sqrt(2)/6,1), (0,1), ((6-math.sqrt(2))/12,1/2)]
+
+Y = [((6+math.sqrt(2))/12,1/2), (1,1), (1-math.sqrt(2)/6,1), (1/2,(6+math.sqrt(2))/12), (math.sqrt(2)/6,1), (0,1), ((6-math.sqrt(2))/12,1/2), (5/12,11/24), (5/12,0), (7/12,0), (7/12,11/24)]
+
+Z = [(0, 0),(1, 0),(1, 1/6),((17/6 + 17*math.sqrt(2)*(6+math.sqrt(2))/34) / (3*(6+math.sqrt(2))), 1/6),(1,1),(0,1),(0,5/6),(85/(18*(6+math.sqrt(2))), 5/6)]

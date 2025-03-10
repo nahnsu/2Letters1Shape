@@ -10,6 +10,7 @@ import grok_think as grok_think
 import letters as let
 import o1_letters as o1
 import letter_holes as letter_holes
+import claude as claude
 
 def arc_points(radius, start_angle, end_angle, center=[0,0], num_points=50):
     angles = [start_angle + i * (end_angle - start_angle) / (num_points - 1)
@@ -31,6 +32,9 @@ class Letter2D:
         points = getattr(let, self.letter)
         # points = getattr(o1, self.letter)
         # points = getattr(grok, self.letter)
+        # points = getattr(grok_think, self.letter)
+        # points = getattr(claude, self.letter)
+
         scaled_points = [(point[0] * self.scale, point[1] * self.scale) for point in points]
         return scaled_points
 
@@ -90,10 +94,12 @@ class TwoLetter3D:
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
             return
         else:
+            file_name = self.letterA
             # file_name = "o1_" + self.letterA
             # file_name = "grok_think_" + self.letterA
-            file_name = self.letterA
             # file_name = "grok_" + self.letterA
+            # file_name = "claude_" + self.letterA
+
             scad_render_to_file(letterA3D, f"output/{file_name}.scad", file_header='$fn=50;')
             subprocess.run(["C:\\Program Files\\OpenSCAD\\openscad.exe", "-o", f"output\\{file_name}.stl", f"output\\{file_name}.scad"])
             # subprocess.run(["openscad", "-o", f"output\\{file_name}.png", f"output\\{file_name}.scad", "--imgsize=800,600", "--autocenter"])
@@ -107,11 +113,11 @@ if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
 
     # Generate a letter
-    # letter = input()
-    # shape = TwoLetter3D(10, letter)
-    # shape.render()
+    letter = input()
+    shape = TwoLetter3D(10, letter)
+    shape.render()
     
-    # letters = [chr(x) for x in range(ord('A'), ord('J') + 1)]
+    # letters = [chr(x) for x in range(ord('A'), ord('Z') + 1)]
 
     # # Generate all combos
     # for letter in letters:
@@ -119,8 +125,13 @@ if __name__ == "__main__":
     #         shape = TwoLetter3D(10, letter, other_letter)
     #         shape.render()
 
+    # # Generate all letters
+    # for letter in letters:
+    #     shape = TwoLetter3D(10,letter)
+    #     shape.render()
+
     # Generate an input combo
-    letter1 = input("Enter the first letter:")
-    letter2 = input("Enter the second letter:")
-    shape = TwoLetter3D(10, letter1, letter2)
-    shape.render()
+    # letter1 = input("Enter the first letter:")
+    # letter2 = input("Enter the second letter:")
+    # shape = TwoLetter3D(10, letter1, letter2)
+    # shape.render()

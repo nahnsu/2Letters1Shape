@@ -6,6 +6,7 @@ To generate an object, run this script:
 ```
 python 2letters.py
 ```
+
 Follow instructions in the terminal (inputting two letters). Then look in the output folder for your stl file. 
 
 # Logs
